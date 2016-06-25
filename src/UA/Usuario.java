@@ -11,6 +11,7 @@ public class Usuario {
 	private String login;
 	private String senha;
 	private String email;
+	private static Scanner input;
 
 
 
@@ -69,7 +70,7 @@ public class Usuario {
 
 
 	public static boolean autenticar(List users){
-		Scanner input = new Scanner(System.in);
+		input = new Scanner(System.in);
 		String user;
 		String senha;
 		boolean autorizado = false;
@@ -121,13 +122,13 @@ public class Usuario {
 		Usuario ronaldo = new Usuario( 2, 106, "Ronaldo", "Santos", "ronaldo", "pesq", "rs@ua.com");
 		users.add(ronaldo);
 
-		Usuario  josue = new Usuario( 2, 107, "Josue", "Mendonça", "josue", "pesq", "jm@ua.com");
+		Usuario  josue = new Usuario( 2, 107, "Josue", "Mendonca", "josue", "pesq", "jm@ua.com");
 		users.add(josue);
 
 		Usuario  jessica = new Usuario( 2, 108, "Jessica", "Keislane", "jessica", "pesq", "jkes@ua.com");
 		users.add(jessica);
 
-		Usuario  gustavo = new Usuario( 2, 109, "Gustavo", "Lourenço", "gustavo", "pesq", "lg@ua.com");
+		Usuario  gustavo = new Usuario( 2, 109, "Gustavo", "Lourenco", "gustavo", "pesq", "lg@ua.com");
 		users.add(gustavo);
 
 		//professores
@@ -149,7 +150,7 @@ public class Usuario {
 		Usuario  josefa = new Usuario( 3, 115, "Josefa", "Lima", "josefa", "prof", "jl@ua.com");
 		users.add(josefa);
 
-		Usuario  eliude = new Usuario( 3, 116, "Eliude", "Gonçalves", "eliude", "prof", "ego@ua.com");
+		Usuario  eliude = new Usuario( 3, 116, "Eliude", "Goncalves", "eliude", "prof", "ego@ua.com");
 		users.add(eliude);
 
 		Usuario  rafael = new Usuario( 3, 117, "Rafael", "Rocha", "rafael", "prof", "rr@ua.com");
@@ -160,7 +161,7 @@ public class Usuario {
 
 	public static List adicionar(int cod, List users){
 
-		Scanner input = new Scanner(System.in);
+		input = new Scanner(System.in);
 
 		Usuario user = new Usuario(0,0,"","","","","");
 		System.out.print("****** CADASTRO ******\n");
@@ -215,10 +216,14 @@ public class Usuario {
 	}
 
 	public static void escolha(List users, List l_recursos){
-		Scanner input = new Scanner(System.in);
-		int esc, cod = 118;
+		input = new Scanner(System.in);
+		int esc, cod = 118, id_user;
 		String nome, cod_recurso;
 		boolean permissao = false;
+		boolean perm = false;
+		int atividade = 0;
+		String titulo = null, descricao = null, materialApoio = null, participantes = null;
+		String dataHoraInicio = null, dataHoraFim = null;
 
 		esc = input.nextInt();
 		while(esc < 0 || esc > 7){
@@ -232,7 +237,7 @@ public class Usuario {
 				System.out.println("*** Cadastro de usuarios ***");
 				System.out.println("TIPOS:\n*      1 - Adm\n*      2 - Pesquisador\n*     "
 						+ " 3 - Professor\n*      4 - Aluno Doutorado\n*      "
-						+ "5 - Aluno Mestrado\n*      6 - Aluno Graduação");
+						+ "5 - Aluno Mestrado\n*      6 - Aluno Graduacao");
 				users = Usuario.adicionar(cod, users);
 				System.out.println("Cadastro realizado com Sucesso...\n");
 				cod++;
@@ -245,7 +250,7 @@ public class Usuario {
 				break;
 
 			case 3:
-				System.out.println("\n*** Solicitação de recurso ***\n");
+				System.out.println("\n*** Solicitacao de recurso ***\n");
 				System.out.print("cod do recurso desejado: ");
 				cod_recurso = input.next();
 
@@ -255,40 +260,63 @@ public class Usuario {
 				if(permissao){
 					System.out.println("Recurso disponivel");
 					System.out.print("id do usuario alocador: ");
-					int id_user = input.nextInt();
+					id_user = input.nextInt();
 					if(verificacaoDeUsuarioValido(id_user, users)){
 						System.out.print("\n1 - Aula tradicional\n2 - Apresentacoes\n3 - laboratorios\n0 - sair\nAtividade a realizar: ");
-						int atividade = input.nextInt();
+						atividade = input.nextInt();
 						while(atividade < 1 || atividade > 4){
 							System.out.print("\n1 - Aula tradicional\n2 - Apresentacoes\n3 - laboratorios\n0 - sair\nAtividade a realizar: ");
 							atividade = input.nextInt();
 							if(atividade == 0) break;
 						}
-						if(atividade == 1 || atividade == 3){
-							permissao = permissaoParaAlocacao(users);
-
+						perm = false;
+						if(atividade == 2 ) {
+							perm = true;
+						} else if(atividade == 1 || atividade == 3){
+							perm = permissaoParaAlocacao(users, id_user);
 						} else {
-							permissao = true;
-							System.out.println("Voce não tem permissao para alocar esse espaco");
+							System.out.println("Voce nao tem permissao para alocar esse espaco");
 						}
 					}
 				
-					if(permissao){
+					if(perm){
+						System.out.println("\n** Detalhes da atividade **\n");
+						System.out.print("Data e hora de inicio\n(formato: \"dd/MM/yyyy HH:mm\" ): ");
+						input.nextLine();
+						dataHoraInicio = input.nextLine();
+						System.out.print("Data e hora de fim do uso\n(formato: \"dd/MM/yyyy HH:mm\" ): ");
+						dataHoraFim = input.nextLine();
 						System.out.print("Titulo da atividade: ");
-						String titulo = input.next();
-						System.out.print("Descrição breve: ");
-						String descricao = input.next();
+						titulo = input.nextLine();
+						System.out.print("Descricao breve: ");
+						descricao = input.nextLine();
 						System.out.print("Participantes: ");
-						String participantes = input.next();
+						participantes = input.nextLine();
 						System.out.print("Material de apoio: ");
-						String materialApoio = input.next();
+						materialApoio = input.nextLine();
+						
+					} else {
+						System.out.println("Voce nao pode alocar esse recurso");
+					}
+					
+					permissao = false;
+					if(perm) permissao = Processos.autorizacaoAdm(users, titulo, descricao, participantes, materialApoio, dataHoraInicio, dataHoraFim);
+					if(permissao){
+									
+						Processos.cadastrarAtividade(atividade, titulo, descricao, participantes, materialApoio, dataHoraInicio, dataHoraFim);
+						for ( int i = 0; i < l_recursos.size(); i++) {
+							Recursos lr = (Recursos) l_recursos.get(i);				  
+
+							if(cod_recurso.equals(lr.getId()) ){
+
+								lr.setStatus(1);
+								lr.setUsuario_alocador(id_user);
+							} 
+						}
 						
 					}
 					
-					//adicionar os dados a uma classe atividade e copiar todos os dados coletados para ela
-
-				} else {
-					System.out.println("Esse usuario não está cadastrado no sistema");
+					
 				}
 
 				break;
@@ -312,6 +340,7 @@ public class Usuario {
 					System.out.print(lr.getId()+ " ");			
 					System.out.print(lr.getNome_recurso() + " " + Processos.status(lr.getStatus()));
 					System.out.println(Processos.responsavel(lr.getResponsavel(), users));
+					if(!(0 == lr.getStatus())) System.out.println("usuario alocador: " + lr.getUsuario_alocador() + " " + userName(lr.getUsuario_alocador(), users));
 				}
 				break;
 			case 7:
@@ -327,12 +356,26 @@ public class Usuario {
 		} //end switch
 	}
 
-	private static boolean permissaoParaAlocacao(List users) {
+	private static String userName(int usuario_alocador, List users) {
+		String name = null;
+		for (int i = 0; i < users.size(); i++) {
+			Usuario us = (Usuario) users.get(i);
+			
+			if(usuario_alocador == us.getId()) {
+				return (us.getNome() + " " + us.getSobrenome());
+			}
+		}
+		
+		return name;
+	}
+
+	private static boolean permissaoParaAlocacao(List users, int id_user) {
 		boolean bool = false;
 		for (int i = 0; i < users.size(); i++) {
-			Usuario us = (Usuario) users.get(i);				  
-			if( 3 == us.getTipo()){
+			Usuario us = (Usuario) users.get(i);
+			if( id_user == us.getId() && us.getTipo() == 3){
 				bool = true;
+				break;
 			}
 		}
 
@@ -344,6 +387,7 @@ public class Usuario {
 		for (int i = 0; i < users.size(); i++) {
 			Usuario us = (Usuario) users.get(i);				  
 			if(id_user == us.id){
+				System.out.println("\n"+ us.getId() + " " + tipoDeUsuario(us.getTipo()) + " " + us.getNome() + " " + us.getSobrenome());
 				bool = true;
 			}
 		}

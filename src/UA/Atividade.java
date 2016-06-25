@@ -1,16 +1,22 @@
 package UA;
 
 public class Atividade {
+	
+	
 	private int tipo;
 	private String titulo, descricao, participantes, materialApoio;
+	private String dataHoraInicio, dataHoraFim;
 	
-	public Atividade(int tipo, String titulo, String descricao, String participantes, String materialApoio) {
-		
+	
+	public Atividade(int tipo, String titulo, String descricao, String participantes, String materialApoio,
+			String dataHoraInicio, String dataHoraFim) {
 		this.tipo = tipo;
 		this.titulo = titulo;
 		this.descricao = descricao;
 		this.participantes = participantes;
 		this.materialApoio = materialApoio;
+		this.dataHoraInicio = dataHoraInicio;
+		this.dataHoraFim = dataHoraFim;
 	}
 	public int getTipo() {
 		return tipo;
@@ -43,5 +49,17 @@ public class Atividade {
 		this.materialApoio = materialApoio;
 	}
 	
+	public String getDataHoraInicio() {
+		return dataHoraInicio;
+	}
+	public void setDataHoraInicio(String dataHoraInicio) {
+		this.dataHoraInicio = dataHoraInicio;
+	}
+	public String getDataHoraFim() {
+		return dataHoraFim;
+	}
+	public void setDataHoraFim(String dataHoraFim) {
+		this.dataHoraFim = dataHoraFim;
+	}
 	//metodo pra adicionar historico de atividade de acordo com o tipo
 }
