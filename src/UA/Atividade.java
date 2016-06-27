@@ -62,4 +62,5 @@ public class Atividade {
 		this.dataHoraFim = dataHoraFim;
 	}
 	//metodo pra adicionar historico de atividade de acordo com o tipo
+	
 }

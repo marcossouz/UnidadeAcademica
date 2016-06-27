@@ -32,6 +32,7 @@ public class Processos {
 	private static Recursos proj04 = new Recursos("PROJ04", "Projetor 04", 0, 0, 104, "");
 	private static Recursos proj05 = new Recursos("PROJ05", "Projetor 05", 0, 0, 105, "");
 
+
 	public static List carregarRecursos(){
 		List l_recursos = new ArrayList();
 		l_recursos.add(lab01);
@@ -108,14 +109,14 @@ public class Processos {
 		return autorizacao;
 	}
 
-	public static void cadastrarAtividade(int atividade, String titulo, String descricao, String participantes,
+	public static List cadastrarAtividade(List l_atividades, int atividade, String titulo, String descricao, String participantes,
 			String materialApoio, String dataHoraInicio, String dataHoraFim) {
 
 
 		Atividade ativ = new Atividade(atividade, titulo, descricao, participantes, materialApoio, dataHoraInicio, dataHoraFim);
-		List at = new ArrayList();
-		at.add(ativ);
+		l_atividades.add(ativ);
 
+		return l_atividades;
 	}
 
 	public static boolean autorizacaoAdm(List users, String titulo, String descricao, String participantes, String materialApoio,
@@ -135,9 +136,9 @@ public class Processos {
 
 			for (int i = 0; i < users.size(); i++) {
 				Usuario us = (Usuario) users.get(i);
-				
+
 				if(login.equals(us.getLogin()) && senha.equals(us.getSenha()) && us.getTipo() == 1){
-					
+
 					System.out.println("Autorizado, status modificado para \"Alocado\"");
 					bool = true;
 					break;
@@ -146,25 +147,25 @@ public class Processos {
 		} else {
 			System.out.println("Voce deve preencher todos campos solicitados corretamente...\nalocacao cancelada...");
 		}
-		
+
 		if(!bool) System.out.println("Alocacao de recurso nao autorizada...");
 		return bool;
 	}
 
 	private static boolean validarDatas(String dataHoraInicio, String dataHoraFim) {
-		
+
 		boolean bool = false;
-		
+
 		Calendar dataAtual = new GregorianCalendar();
 		Calendar dhi = Calendar.getInstance();
 		Calendar dhf = Calendar.getInstance();
 		SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		
+
 		dhi.setLenient(false);
 		dhf.setLenient(false);
 
 		try {
-			
+
 			dhi.setTime(formatoData.parse(dataHoraInicio));
 			dhf.setTime(formatoData.parse(dataHoraFim));
 			bool = true;
@@ -172,16 +173,144 @@ public class Processos {
 			bool = false;
 		}
 		if(bool){
-			
+
 			//verificar se a data de inicio acontece dps da data atual
 			//verificar se a data final eh depois da data inicial
 			if(!(dhi.after(dataAtual) && dhf.after(dhi))){
 				bool = false;
 			}
 		}
-		
+
 		if(!bool) System.out.println("Digite datas de inicio e fim invalidas...");
 		return bool;
 	}
-}
 
+	public static void listarAtividades(List l_atividades) {
+		for (int i = 0; i < l_atividades.size(); i++) {
+			Atividade lat = (Atividade) l_atividades.get(i);
+
+			System.out.println("--> " + lat.getTitulo());
+		}
+
+	}
+
+	public static void autorizacaoResp(List l_recursos, List users) {
+
+		String login, senha, id_rec;
+		int id_user = 0;
+		boolean autentic = false;
+
+		System.out.println("--- Recursos que aguardam autorizacao do responsavel ---");
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+
+			if(1 == lr.getStatus()){
+				System.out.print("--> " + lr.getId() + " ");
+				System.out.println(Processos.responsavel(lr.getResponsavel(), users));
+			}
+		}
+
+		System.out.print("\nid do recurso que vc deseja autorizar: ");
+
+		id_rec = input.next();
+
+		//verificando se o user esta em algum outro processo "Em andamento"
+		// 1 coletando o usuario alocador
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+
+			if(id_rec.equals(lr.getId())){
+				id_user = lr.getUsuario_alocador();
+
+			}
+		}
+
+		//agora verificando se ele tem algum processo "Em andamento"
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+
+			if(id_user == lr.getUsuario_alocador() && lr.getStatus() == 2){
+				System.out.println("o usuario " + lr.getUsuario_alocador() + " ja possui um outro recurso em andamento");
+				System.out.println("autorizacao nao permitida...");
+				return;
+			}
+		}
+
+
+		System.out.println("--- Entre com login e senha do responsavel ---\n");
+
+		autentic = Usuario.autenticar(users);
+
+
+
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+
+			if(1 == lr.getStatus() && id_rec.equals(lr.getId()) && autentic){
+				lr.setStatus(2);
+				System.out.println("efetuado, status modificado para \"Em andamento\" ");
+				return;
+			}
+
+		}
+
+		System.out.println("Dados nao conferem, autorizacao nao efetuada\n");
+	}
+
+	public static List confirmarConclusao(List l_recursos, List l_atividades, List users) {
+		String login , senha, id_rec;
+		boolean bool = false;
+
+		System.out.println("--- Recursos que aguardam confirmacao de conclusao ---");
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+
+			if(2 == lr.getStatus()){
+				System.out.print("--> " + lr.getId() + " ");
+				System.out.println(Processos.responsavel(lr.getResponsavel(), users));
+			}
+		}	
+
+		System.out.print("\nid do recurso que vc deseja confirmar a conclusao: ");
+
+		id_rec = input.next();
+		
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+
+			if(2 == lr.getStatus() && id_rec.equals(lr.getId()) ){
+				
+				for (int j = 0; j < l_atividades.size(); j++) {
+					Atividade lat = (Atividade) l_atividades.get(j);
+					
+					if(lat.getDescricao() != null && !("".equals(lat.getDescricao()))){
+						System.out.println("Digite o usuario e a senha do administrador para confirmar a conclusao");
+						System.out.print("usuario: ");
+						login = input.next();
+						System.out.print("senha: ");
+						senha = input.next();
+
+						for (int k = 0; k < users.size(); k++) {
+							Usuario us = (Usuario) users.get(k);
+
+							if(login.equals(us.getLogin()) && senha.equals(us.getSenha()) && us.getTipo() == 1){
+
+								System.out.println("Autorizado, status modificado para \"Concluido\"");
+								lr.setStatus(3);
+								return l_recursos;
+							} 
+						}
+						System.out.println("confirmacao nao concluida, usuario nao adm/Login ou senha Errados");
+						return l_recursos;
+					}
+				}
+				System.out.println("confirmacao nao concluida, Descricao nao pode ser vazia");
+				return l_recursos;
+			}
+		}
+		System.out.println("confirmacao nao concluida, id nao encontrado/Nao existe nenhum recurso a confirmar");
+		return l_recursos;
+	}
+
+
+} //fim da classe

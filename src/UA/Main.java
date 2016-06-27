@@ -9,6 +9,7 @@ public class Main {
 
 		List users = new ArrayList();
 		List l_recursos = new ArrayList();
+		List l_atividades = new ArrayList();
 		users = Usuario.preconfig();
 		l_recursos = Processos.carregarRecursos();
 
@@ -22,7 +23,7 @@ public class Main {
 		System.out.println("\nBem-vindo ao sistema da Unidade Academica SouzaME");
 		
 		Usuario.menu();
-		Usuario.escolha(users, l_recursos);
+		Usuario.escolha(users, l_recursos, l_atividades);
 		
 	}	
 }

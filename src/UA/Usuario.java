@@ -206,16 +206,22 @@ public class Usuario {
 
 	public static void menu(){
 		System.out.println("1 - Cadastrar novo usuario");
-		System.out.println("2 - Consulta por usuario");
+		System.out.println("2 - Consulta por usuario"); //sem codificacao ainda
 		System.out.println("3 - Solicitar recurso");
 		System.out.println("4 - Listar usuarios");
 		System.out.println("5 - Listar recursos");
-		System.out.println("7 - Sair");
+		System.out.println("6 - Autorizacao do responsavel pelo recurso");
+		System.out.println("7 - Confirmar conclusao do uso do recurso");
+		System.out.println("8 - disponibilizar recursos para alocacao (\"concluido\" para \"Em processo de alocacao\")");
+		//8 nao implementado ainda
+		
+		System.out.println("10 - Historico de atividades realizadas");
+		System.out.println("0 - Sair");
 		System.out.println("   -- escolha -- ");
 
 	}
 
-	public static void escolha(List users, List l_recursos){
+	public static void escolha(List users, List l_recursos, List l_atividades){
 		input = new Scanner(System.in);
 		int esc, cod = 118, id_user;
 		String nome, cod_recurso;
@@ -226,11 +232,11 @@ public class Usuario {
 		String dataHoraInicio = null, dataHoraFim = null;
 
 		esc = input.nextInt();
-		while(esc < 0 || esc > 7){
+		while(esc < 0 || esc > 10){
 			esc = input.nextInt();
 		}
 
-		while(esc >= 0 && esc <= 7){
+		while(esc >= 0 && esc <= 10){
 
 			switch(esc){
 			case 1:
@@ -246,7 +252,7 @@ public class Usuario {
 			case 2:
 				System.out.println("\n*** Consulta por usuario ***\n");
 				System.out.print("nome: ");
-				nome = input.next();
+				nome = input.nextLine();
 				break;
 
 			case 3:
@@ -303,7 +309,7 @@ public class Usuario {
 					if(perm) permissao = Processos.autorizacaoAdm(users, titulo, descricao, participantes, materialApoio, dataHoraInicio, dataHoraFim);
 					if(permissao){
 									
-						Processos.cadastrarAtividade(atividade, titulo, descricao, participantes, materialApoio, dataHoraInicio, dataHoraFim);
+						l_atividades = Processos.cadastrarAtividade(l_atividades, atividade, titulo, descricao, participantes, materialApoio, dataHoraInicio, dataHoraFim);
 						for ( int i = 0; i < l_recursos.size(); i++) {
 							Recursos lr = (Recursos) l_recursos.get(i);				  
 
@@ -343,14 +349,30 @@ public class Usuario {
 					if(!(0 == lr.getStatus())) System.out.println("usuario alocador: " + lr.getUsuario_alocador() + " " + userName(lr.getUsuario_alocador(), users));
 				}
 				break;
+			case 6:
+				System.out.println("** Autorizacao do responsal pelo recurso **");
+				
+				Processos.autorizacaoResp(l_recursos, users);
+				break;
+				
 			case 7:
+				System.out.println("** confirmacao de conclusao (apenas adm)");
+				l_recursos = Processos.confirmarConclusao(l_recursos, l_atividades, users);
+				break;
+				
+			case 10:
+				System.out.println("** Atividades Realizadas **");
+				Processos.listarAtividades(l_atividades);
+				break;
+				
+			case 0:
 				System.out.println("\nSaindo...\n");
 				System.exit(0);
 			}
 			System.out.println("\n-------------------------------------------\n");
 			menu();
 			esc = input.nextInt();
-			while(esc < 0 || esc > 7){
+			while(esc < 0 || esc > 10){
 				esc = input.nextInt();
 			}
 		} //end switch
