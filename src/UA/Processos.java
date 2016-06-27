@@ -9,11 +9,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class Processos {
 
 	private static Scanner input = new Scanner(System.in);
-	//recursos disponiveis
+	// recursos disponiveis
 	private static Recursos lab01 = new Recursos("LAB01", "Laboratorio 01", 0, 0, 106, "");
 	private static Recursos lab02 = new Recursos("LAB02", "Laboratorio 02", 0, 0, 107, "");
 	private static Recursos aud01 = new Recursos("AUD01", "Auditorio 01", 0, 0, 108, "");
@@ -32,8 +31,7 @@ public class Processos {
 	private static Recursos proj04 = new Recursos("PROJ04", "Projetor 04", 0, 0, 104, "");
 	private static Recursos proj05 = new Recursos("PROJ05", "Projetor 05", 0, 0, 105, "");
 
-
-	public static List carregarRecursos(){
+	public static List carregarRecursos() {
 		List l_recursos = new ArrayList();
 		l_recursos.add(lab01);
 		l_recursos.add(lab02);
@@ -56,10 +54,10 @@ public class Processos {
 		return l_recursos;
 	}
 
-	public static String status(int status){
+	public static String status(int status) {
 		String situacao = null;
 
-		switch (status){
+		switch (status) {
 		case 0:
 			return "** Em processo de alocacao **";
 		case 1:
@@ -72,11 +70,11 @@ public class Processos {
 		return situacao;
 	}
 
-	public static String responsavel(int id, List users){
+	public static String responsavel(int id, List users) {
 
 		for (int i = 0; i < users.size(); i++) {
 			Usuario us = (Usuario) users.get(i);
-			if(id == us.getId()){
+			if (id == us.getId()) {
 
 				return (" Resp: " + us.getId() + " " + us.getNome() + " " + us.getSobrenome());
 			}
@@ -85,47 +83,50 @@ public class Processos {
 		return "";
 	}
 
-	public static boolean vericacaoDeDisponibilidade(String  cod_recurso, List l_recursos) {
+	public static boolean vericacaoDeDisponibilidade(String cod_recurso, List l_recursos) {
 		boolean autorizacao = false;
 		int verificador = 0;
 
 		for (int i = 0; i < l_recursos.size(); i++) {
-			Recursos lr = (Recursos) l_recursos.get(i);				  
+			Recursos lr = (Recursos) l_recursos.get(i);
 
-			if(cod_recurso.equals(lr.getId()) ){
+			if (cod_recurso.equals(lr.getId())) {
 
-				if(lr.getStatus() == 0){
+				if (lr.getStatus() == 0) {
 					autorizacao = true;
 					verificador = 2;
 					break;
 				} else {
 					verificador = 1;
 				}
-			} 
+			}
 		}
 
-		if(verificador == 0) System.out.println("cod de recurso invalido");
-		if(verificador == 1) System.out.println("Recurso nao disponivel");
+		if (verificador == 0)
+			System.out.println("cod de recurso invalido");
+		if (verificador == 1)
+			System.out.println("Recurso nao disponivel");
 		return autorizacao;
 	}
 
-	public static List cadastrarAtividade(List l_atividades, int atividade, String titulo, String descricao, String participantes,
-			String materialApoio, String dataHoraInicio, String dataHoraFim) {
+	public static List cadastrarAtividade(List l_atividades, int atividade, int id_user, String titulo, String descricao,
+			String participantes, String materialApoio, String dataHoraInicio, String dataHoraFim, String recurso) {
 
-
-		Atividade ativ = new Atividade(atividade, titulo, descricao, participantes, materialApoio, dataHoraInicio, dataHoraFim);
+		Atividade ativ = new Atividade(atividade, id_user, titulo, descricao, participantes, materialApoio, dataHoraInicio,
+				dataHoraFim, recurso);
 		l_atividades.add(ativ);
 
 		return l_atividades;
 	}
 
-	public static boolean autorizacaoAdm(List users, String titulo, String descricao, String participantes, String materialApoio,
-			String dataHoraInicio, String dataHoraFim) {
+	public static boolean autorizacaoAdm(List users, String titulo, String descricao, String participantes,
+			String materialApoio, String dataHoraInicio, String dataHoraFim) {
 		boolean bool = false;
-		String login , senha;
+		String login, senha;
 
-		if(validarDatas(dataHoraInicio, dataHoraFim) && !(titulo == null || titulo.equals("") || descricao == null || descricao.equals("")
-				|| participantes == null || participantes.equals("") || materialApoio == null || materialApoio.equals(""))){
+		if (validarDatas(dataHoraInicio, dataHoraFim) && !(titulo == null || titulo.equals("") || descricao == null
+				|| descricao.equals("") || participantes == null || participantes.equals("") || materialApoio == null
+				|| materialApoio.equals(""))) {
 
 			System.out.println("Verificando consistencia de dados...");
 			System.out.println("Digite o usuario e a senha do administrador para confirmar alocacao de Recurso");
@@ -137,7 +138,7 @@ public class Processos {
 			for (int i = 0; i < users.size(); i++) {
 				Usuario us = (Usuario) users.get(i);
 
-				if(login.equals(us.getLogin()) && senha.equals(us.getSenha()) && us.getTipo() == 1){
+				if (login.equals(us.getLogin()) && senha.equals(us.getSenha()) && us.getTipo() == 1) {
 
 					System.out.println("Autorizado, status modificado para \"Alocado\"");
 					bool = true;
@@ -148,7 +149,8 @@ public class Processos {
 			System.out.println("Voce deve preencher todos campos solicitados corretamente...\nalocacao cancelada...");
 		}
 
-		if(!bool) System.out.println("Alocacao de recurso nao autorizada...");
+		if (!bool)
+			System.out.println("Alocacao de recurso nao autorizada...");
 		return bool;
 	}
 
@@ -172,24 +174,27 @@ public class Processos {
 		} catch (ParseException ex) {
 			bool = false;
 		}
-		if(bool){
+		if (bool) {
 
-			//verificar se a data de inicio acontece dps da data atual
-			//verificar se a data final eh depois da data inicial
-			if(!(dhi.after(dataAtual) && dhf.after(dhi))){
+			// verificar se a data de inicio acontece dps da data atual
+			// verificar se a data final eh depois da data inicial
+			if (!(dhi.after(dataAtual) && dhf.after(dhi))) {
 				bool = false;
 			}
 		}
 
-		if(!bool) System.out.println("Digite datas de inicio e fim invalidas...");
+		if (!bool)
+			System.out.println("Datas de inicio/fim invalidas...");
 		return bool;
 	}
 
-	public static void listarAtividades(List l_atividades) {
+	public static void listarAtividades(List l_atividades, String cod_rec) {
 		for (int i = 0; i < l_atividades.size(); i++) {
 			Atividade lat = (Atividade) l_atividades.get(i);
 
-			System.out.println("--> " + lat.getTitulo());
+			if(cod_rec.equals(lat.getRecurso())){
+				System.out.println(lat.getRecurso() + " " + lat.getUser()+ " " + lat.getTitulo());
+			}
 		}
 
 	}
@@ -204,7 +209,7 @@ public class Processos {
 		for (int i = 0; i < l_recursos.size(); i++) {
 			Recursos lr = (Recursos) l_recursos.get(i);
 
-			if(1 == lr.getStatus()){
+			if (1 == lr.getStatus()) {
 				System.out.print("--> " + lr.getId() + " ");
 				System.out.println(Processos.responsavel(lr.getResponsavel(), users));
 			}
@@ -214,39 +219,37 @@ public class Processos {
 
 		id_rec = input.next();
 
-		//verificando se o user esta em algum outro processo "Em andamento"
+		// verificando se o user esta em algum outro processo "Em andamento"
 		// 1 coletando o usuario alocador
 		for (int i = 0; i < l_recursos.size(); i++) {
 			Recursos lr = (Recursos) l_recursos.get(i);
 
-			if(id_rec.equals(lr.getId())){
+			if (id_rec.equals(lr.getId())) {
 				id_user = lr.getUsuario_alocador();
 
 			}
 		}
 
-		//agora verificando se ele tem algum processo "Em andamento"
+		// agora verificando se ele tem algum processo "Em andamento"
 		for (int i = 0; i < l_recursos.size(); i++) {
 			Recursos lr = (Recursos) l_recursos.get(i);
 
-			if(id_user == lr.getUsuario_alocador() && lr.getStatus() == 2){
-				System.out.println("o usuario " + lr.getUsuario_alocador() + " ja possui um outro recurso em andamento");
+			if (id_user == lr.getUsuario_alocador() && lr.getStatus() == 2) {
+				System.out
+				.println("o usuario " + lr.getUsuario_alocador() + " ja possui um outro recurso em andamento");
 				System.out.println("autorizacao nao permitida...");
 				return;
 			}
 		}
 
-
 		System.out.println("--- Entre com login e senha do responsavel ---\n");
 
 		autentic = Usuario.autenticar(users);
 
-
-
 		for (int i = 0; i < l_recursos.size(); i++) {
 			Recursos lr = (Recursos) l_recursos.get(i);
 
-			if(1 == lr.getStatus() && id_rec.equals(lr.getId()) && autentic){
+			if (1 == lr.getStatus() && id_rec.equals(lr.getId()) && autentic) {
 				lr.setStatus(2);
 				System.out.println("efetuado, status modificado para \"Em andamento\" ");
 				return;
@@ -258,32 +261,32 @@ public class Processos {
 	}
 
 	public static List confirmarConclusao(List l_recursos, List l_atividades, List users) {
-		String login , senha, id_rec;
+		String login, senha, id_rec;
 		boolean bool = false;
 
 		System.out.println("--- Recursos que aguardam confirmacao de conclusao ---");
 		for (int i = 0; i < l_recursos.size(); i++) {
 			Recursos lr = (Recursos) l_recursos.get(i);
 
-			if(2 == lr.getStatus()){
+			if (2 == lr.getStatus()) {
 				System.out.print("--> " + lr.getId() + " ");
 				System.out.println(Processos.responsavel(lr.getResponsavel(), users));
 			}
-		}	
+		}
 
 		System.out.print("\nid do recurso que vc deseja confirmar a conclusao: ");
 
 		id_rec = input.next();
-		
+
 		for (int i = 0; i < l_recursos.size(); i++) {
 			Recursos lr = (Recursos) l_recursos.get(i);
 
-			if(2 == lr.getStatus() && id_rec.equals(lr.getId()) ){
-				
+			if (2 == lr.getStatus() && id_rec.equals(lr.getId())) {
+
 				for (int j = 0; j < l_atividades.size(); j++) {
 					Atividade lat = (Atividade) l_atividades.get(j);
-					
-					if(lat.getDescricao() != null && !("".equals(lat.getDescricao()))){
+
+					if (lat.getDescricao() != null && !("".equals(lat.getDescricao()))) {
 						System.out.println("Digite o usuario e a senha do administrador para confirmar a conclusao");
 						System.out.print("usuario: ");
 						login = input.next();
@@ -293,12 +296,12 @@ public class Processos {
 						for (int k = 0; k < users.size(); k++) {
 							Usuario us = (Usuario) users.get(k);
 
-							if(login.equals(us.getLogin()) && senha.equals(us.getSenha()) && us.getTipo() == 1){
+							if (login.equals(us.getLogin()) && senha.equals(us.getSenha()) && us.getTipo() == 1) {
 
 								System.out.println("Autorizado, status modificado para \"Concluido\"");
 								lr.setStatus(3);
 								return l_recursos;
-							} 
+							}
 						}
 						System.out.println("confirmacao nao concluida, usuario nao adm/Login ou senha Errados");
 						return l_recursos;
@@ -312,5 +315,100 @@ public class Processos {
 		return l_recursos;
 	}
 
+	public static List disponibizarRecursos(List l_recursos, List users) {
 
-} //fim da classe
+		System.out.println("--- Recursos a liberar  ---\n");
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+
+			if (3 == lr.getStatus()) {
+				System.out.print("--> " + lr.getId() + " ");
+				System.out.println(Processos.responsavel(lr.getResponsavel(), users));
+			}
+		}
+
+		System.out.print("\nid do recurso que vc deseja liberar: ");
+
+		String id_rec = input.next();
+		boolean bool = false;
+
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+
+			if (id_rec.equals(lr.getId()) && lr.getStatus() == 3) {
+				if (bool = Processos.isAdm(users)) {
+					lr.setStatus(0);
+					System.out.println("\n**  Recurso liberado com sucesso **");
+					return l_recursos;
+				}
+			}
+		}
+
+		if (!bool)
+			System.out.println("Id nao encontrada e/ou recurso com status diferente de\"Concluido\" ");
+		return l_recursos;
+	}
+
+	private static boolean isAdm(List users) {
+		System.out.println("Digite o usuario e a senha do administrador para confirmar a conclusao");
+		System.out.print("usuario: ");
+		String login = input.next();
+		System.out.print("senha: ");
+		String senha = input.next();
+
+		for (int i = 0; i < users.size(); i++) {
+			Usuario us = (Usuario) users.get(i);
+
+			if (login.equals(us.getLogin()) && senha.equals(us.getSenha()) && us.getTipo() == 1) {
+				return true;
+			}
+		}
+
+		System.out.println("Usuario nao autorizado..");
+		return false;
+	}
+
+	public static void consultarUser(List users, List histRec) {
+		int id;
+
+		System.out.println("id do usuario a ser consultado: ");
+		id = input.nextInt();
+
+		for (int i = 0; i < users.size(); i++) {
+			Usuario us = (Usuario) users.get(i);
+
+			if (id == us.getId()) {
+				System.out.println(us.getId() + " " + us.getNome() + " " + us.getSobrenome() + " " + us.getEmail());
+				System.out.println("Recursos alocados...");
+				Processos.imprimirRecursosAlocados(us.getId(), histRec);
+			}
+		}
+	}
+
+	private static void imprimirRecursosAlocados(int id, List histRec) {
+		for (int i = 0; i < histRec.size(); i++) {
+			HistRecursos hr = (HistRecursos) histRec.get(i);
+
+			if (hr.getId_user() == id) {
+				System.out.println(hr.getCod_rec() + " " + Atividade.nomeAtividade(hr.getAtividade()));
+			}
+		}
+	}
+
+	public static void consultarRecurso(List l_recursos, List l_atividades) {
+		System.out.print("digite o codigo do recurso desejado: ");
+		String cod_rec = input.next();
+		
+		
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr = (Recursos) l_recursos.get(i);
+			System.out.println(cod_rec);
+			if (cod_rec.equals(lr.getId())) {
+				System.out.println(lr.getId() + " " + lr.getNome_recurso() + " atividade Realizada:\n ");
+				Processos.listarAtividades(l_atividades, cod_rec);
+			}
+		}
+	}
+} // fim da classe
+
+
