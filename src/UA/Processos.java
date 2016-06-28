@@ -108,9 +108,9 @@ public class Processos {
 		return autorizacao;
 	}
 
-	public static List<Atividade> cadastrarAtividade(List<Atividade> l_atividades, int atividade, int id_user, String titulo,
-			String descricao, String participantes, String materialApoio, String dataHoraInicio, String dataHoraFim,
-			String recurso) {
+	public static List<Atividade> cadastrarAtividade(List<Atividade> l_atividades, int atividade, int id_user,
+			String titulo, String descricao, String participantes, String materialApoio, String dataHoraInicio,
+			String dataHoraFim, String recurso) {
 
 		Atividade ativ = new Atividade(atividade, id_user, titulo, descricao, participantes, materialApoio,
 				dataHoraInicio, dataHoraFim, recurso);
@@ -193,7 +193,9 @@ public class Processos {
 			Atividade lat = (Atividade) l_atividades.get(i);
 
 			if (cod_rec.equals(lat.getRecurso())) {
-				System.out.println("Tipo de atividade: " + Atividade.nomeAtividade(lat.getTipo()) + "\nUsuario Alocador: " + Usuario.NomeUser(lat.getUser(), users) + "\nTitulo da Atividade: " + lat.getTitulo() + "\n");
+				System.out.println("Tipo de atividade: " + Atividade.nomeAtividade(lat.getTipo())
+						+ "\nUsuario Alocador: " + Usuario.NomeUser(lat.getUser(), users) + "\nTitulo da Atividade: "
+						+ lat.getTitulo() + "\n");
 			}
 		}
 
@@ -260,7 +262,8 @@ public class Processos {
 		System.out.println("Dados nao conferem, autorizacao nao efetuada\n");
 	}
 
-	public static List<Recursos> confirmarConclusao(List<Recursos> l_recursos, List<Atividade> l_atividades, List<Usuario> users) {
+	public static List<Recursos> confirmarConclusao(List<Recursos> l_recursos, List<Atividade> l_atividades,
+			List<Usuario> users) {
 		String login, senha, id_rec;
 		System.out.println("--- Recursos que aguardam confirmacao de conclusao ---");
 		for (int i = 0; i < l_recursos.size(); i++) {
@@ -367,10 +370,15 @@ public class Processos {
 	}
 
 	public static void consultarUser(List<Usuario> users, List<HistRecursos> histRec) {
-		int id;
+		int id = 0;
 
 		System.out.println("id do usuario a ser consultado: ");
-		id = input.nextInt();
+		try {
+			id = input.nextInt();
+		} catch (Exception e) {
+			System.out.println("Digite um numero inteiro..");
+			input.nextLine();
+		}
 
 		for (int i = 0; i < users.size(); i++) {
 			Usuario us = (Usuario) users.get(i);
@@ -398,17 +406,19 @@ public class Processos {
 		String cod_rec = input.next();
 
 		for (int i = 0; i < l_recursos.size(); i++) {
-			
+
 			Recursos lr = (Recursos) l_recursos.get(i);
 			if (cod_rec.equals(lr.getId())) {
-				System.out.println("\n" + lr.getId() + " \""+ lr.getNome_recurso()+"\"" + "\natividades Realizadas:\n");
+				System.out.println(
+						"\n" + lr.getId() + " \"" + lr.getNome_recurso() + "\"" + "\natividades Realizadas:\n");
 				Processos.listarAtividades(l_atividades, cod_rec, users);
 				return;
 			}
 		}
 	}
 
-	public static void solicitarRecurso(List<Recursos> l_recursos, List<Usuario> users, List<HistRecursos> historicoRecurso, List<Atividade> l_atividades) {
+	public static void solicitarRecurso(List<Recursos> l_recursos, List<Usuario> users,
+			List<HistRecursos> historicoRecurso, List<Atividade> l_atividades, CodigoAutomatico somador) {
 		System.out.print("cod do recurso desejado: ");
 		String cod_recurso = input.next();
 
@@ -467,7 +477,7 @@ public class Processos {
 				participantes = input.nextLine();
 				System.out.print("Material de apoio: ");
 				materialApoio = input.nextLine();
-				
+
 			} else {
 				System.out.println("Voce nao pode alocar esse recurso");
 			}
@@ -487,11 +497,44 @@ public class Processos {
 
 						lr.setStatus(1);
 						lr.setUsuario_alocador(id_user);
+						somador.somadorDeAlocacoes();
+						switch (atividade) {
+						case 1:
+							somador.somadorAulaTrad();
+							break;
+						case 2:
+							somador.somadorApres();
+							break;
+							
+						case 3:
+							somador.somadorlab();
+							break;
+								
+						default:
+							break;
+						}
+						
+						return;
 					}
 				}
 
 			}
 
 		}
+	}
+
+	public static void relatorioDeAtividades(List<Usuario> users, List<Recursos> l_recursos,
+			List<Atividade> l_atividades, CodigoAutomatico total) {
+
+		System.out.println("Usuarios cadastrados: " + users.size());
+		System.out.println("Recursos \"Em processo de alocacao\": " + Recursos.emAlocacao(l_recursos));
+		System.out.println("Recursos \"Alocado\": " + Recursos.alocado(l_recursos));
+		System.out.println("Recursos \"Em Andamento\": " + Recursos.emAndamento(l_recursos));
+		System.out.println("Recursos \"Concluido\": " + Recursos.Concluido(l_recursos));
+		System.out.println("Total de alocacoes: " + total.alocacoes());
+		System.out.println("Total de aula tradicionais: " + total.aulasTrad());
+		System.out.println("Total de apresentacoes: " + total.apresentacoes());
+		System.out.println("Total de aulas de laboratorio: " + total.laboratorio());
+		
 	}
 } // fim da classe

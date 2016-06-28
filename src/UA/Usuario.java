@@ -230,9 +230,9 @@ public class Usuario {
 		System.out.println("5 - Listar recursos");
 		System.out.println("6 - Autorizacao do responsavel pelo recurso");
 		System.out.println("7 - Confirmar conclusao do uso do recurso");
-		System.out
-				.println("8 - disponibilizar recursos para alocacao (\"concluido\" para \"Em processo de alocacao\")");
+		System.out.println("8 - disponibilizar recursos para alocacao (\"concluido\" para \"Em processo de alocacao\")");
 		System.out.println("9 - Consulta por recurso");
+		System.out.println("10 - Relatorio de atividades na unidade");
 		System.out.println("0 - Sair");
 		System.out.println("\n-------------------------------------------\n");
 		System.out.print("--> ");
@@ -243,46 +243,57 @@ public class Usuario {
 			List<HistRecursos> historicoRecurso, CodigoAutomatico cod) {
 		input = new Scanner(System.in);
 		int esc = -1;
-
-		esc = input.nextInt();
+		
+		try {
+			esc = input.nextInt();
+		} catch (Exception e) {
+			System.out.println("Voce deve digitar um inteiro..");
+			input.nextLine();
+		}
+		
+		
 
 		while (esc < 0 || esc > 10) {
-
-			System.out.println("Voce deve digitar um inteiro");
-
-			esc = input.nextInt();
-
+			
+			System.out.print("Digite um numero entre 0 e 10\n-->");
+			
+			try {
+				esc = input.nextInt();
+			} catch (Exception e) {
+				System.out.println("Voce deve digitar um inteiro..");
+				input.nextLine();
+			}
 		}
 
 		while (esc >= 0 && esc <= 10) {
 
 			switch (esc) {
 			case 1:
-				System.out.println("*** Cadastro de usuarios ***");
+				System.out.println("** Cadastro de usuarios **");
 				users = Usuario.adicionar(users, cod);
 
 				break;
 
 			case 2:
-				System.out.println("\n*** Consulta por usuario ***\n");
+				System.out.println("\n** Consulta por usuario **\n");
 				Processos.consultarUser(users, historicoRecurso);
 
 				break;
 
 			case 3:
-				System.out.println("\n*** Solicitacao de recurso ***\n");
-				Processos.solicitarRecurso(l_recursos, users, historicoRecurso, l_atividades);
+				System.out.println("\n** Solicitacao de recurso **\n");
+				Processos.solicitarRecurso(l_recursos, users, historicoRecurso, l_atividades, cod);
 
 				break;
 
 			case 4:
 
-				System.out.println("\n*** Usuarios Cadastrados ***\n");
+				System.out.println("\n** Usuarios Cadastrados **\n");
 				listarUsuarios(users);
 				break;
 
 			case 5:
-				System.out.println("\n*** Recursos***\n");
+				System.out.println("\n** Recursos **\n");
 				Recursos.listarRecursos(l_recursos, users);
 				
 			case 6:
@@ -292,12 +303,12 @@ public class Usuario {
 				break;
 
 			case 7:
-				System.out.println("** confirmacao de conclusao (apenas adm)");
+				System.out.println("** confirmacao de conclusao (apenas adm) **");
 				l_recursos = Processos.confirmarConclusao(l_recursos, l_atividades, users);
 				break;
 
 			case 8:
-				System.out.println("Disponibilizar recursos para usuarios (adm)");
+				System.out.println("** Disponibilizar recursos para usuarios (adm) **");
 				l_recursos = Processos.disponibizarRecursos(l_recursos, users);
 				break;
 			case 9:
@@ -305,7 +316,10 @@ public class Usuario {
 				Processos.consultarRecurso(l_recursos, l_atividades, users);
 				break;
 			case 10:
-
+				System.out.println("** Relatorio de atividades na unidade **\n");
+				Processos.relatorioDeAtividades(users, l_recursos, l_atividades, cod);
+				break;
+				
 			case 0:
 				System.out.println("\nSaindo...\n");
 				System.exit(0);
