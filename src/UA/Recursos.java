@@ -1,5 +1,6 @@
 package UA;
 
+import java.util.List;
 
 public class Recursos {
 	private String id;
@@ -53,6 +54,18 @@ public class Recursos {
 	}
 	public void setAtividade_realizada(String atividade_realizada) {
 		this.atividade_realizada = atividade_realizada;
+	}
+	public static void listarRecursos(List<Recursos> l_recursos, List<Usuario> users) {
+		for (int i = 0; i < l_recursos.size(); i++) {
+			Recursos lr =  l_recursos.get(i);
+			System.out.print(lr.getId() + " ");
+			System.out.print(lr.getNome_recurso() + " " + Processos.status(lr.getStatus()));
+			System.out.println(Processos.responsavel(lr.getResponsavel(), users));
+			if (!(0 == lr.getStatus()))
+				System.out.println("usuario alocador: " + lr.getUsuario_alocador() + " "
+						+ Usuario.userName(lr.getUsuario_alocador(), users));
+		}
+		
 	}
 		
 }
