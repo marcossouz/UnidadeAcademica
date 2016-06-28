@@ -102,7 +102,7 @@ public class Processos {
 		}
 
 		if (verificador == 0)
-			System.out.println("cod de recurso invalido");
+			System.out.println("cod de recurso invalido!");
 		if (verificador == 1)
 			System.out.println("Recurso nao disponivel");
 		return autorizacao;
@@ -219,7 +219,7 @@ public class Processos {
 
 		System.out.print("\nid do recurso que vc deseja autorizar: ");
 
-		id_rec = input.next();
+		id_rec = input.next().toUpperCase();
 
 		// verificando se o user esta em algum outro processo "Em andamento"
 		// 1 coletando o usuario alocador
@@ -277,7 +277,7 @@ public class Processos {
 
 		System.out.print("\nid do recurso que vc deseja confirmar a conclusao: ");
 
-		id_rec = input.next();
+		id_rec = input.next().toUpperCase();
 
 		for (int i = 0; i < l_recursos.size(); i++) {
 			Recursos lr = (Recursos) l_recursos.get(i);
@@ -330,7 +330,7 @@ public class Processos {
 
 		System.out.print("\nid do recurso que vc deseja liberar: ");
 
-		String id_rec = input.next();
+		String id_rec = input.next().toUpperCase();
 		boolean bool = false;
 
 		for (int i = 0; i < l_recursos.size(); i++) {
@@ -373,11 +373,15 @@ public class Processos {
 		int id = 0;
 
 		System.out.println("id do usuario a ser consultado: ");
+		
 		try {
 			id = input.nextInt();
+		
 		} catch (Exception e) {
+			
 			System.out.println("Digite um numero inteiro..");
 			input.nextLine();
+			return;
 		}
 
 		for (int i = 0; i < users.size(); i++) {
@@ -387,8 +391,10 @@ public class Processos {
 				System.out.println(us.getId() + " " + us.getNome() + " " + us.getSobrenome() + " " + us.getEmail());
 				System.out.println("--- Recursos alocados ---\n");
 				Processos.imprimirRecursosAlocados(us.getId(), histRec);
+				return;
 			}
 		}
+		System.out.println("Usuario nao encontrado");
 	}
 
 	private static void imprimirRecursosAlocados(int id, List<HistRecursos> histRec) {
@@ -403,7 +409,7 @@ public class Processos {
 
 	public static void consultarRecurso(List<Recursos> l_recursos, List<Atividade> l_atividades, List<Usuario> users) {
 		System.out.print("digite o codigo do recurso desejado: ");
-		String cod_rec = input.next();
+		String cod_rec = input.next().toUpperCase();
 
 		for (int i = 0; i < l_recursos.size(); i++) {
 
@@ -415,34 +421,50 @@ public class Processos {
 				return;
 			}
 		}
+		System.out.println("cod invalido..");
 	}
 
 	public static void solicitarRecurso(List<Recursos> l_recursos, List<Usuario> users,
 			List<HistRecursos> historicoRecurso, List<Atividade> l_atividades, CodigoAutomatico somador) {
 		System.out.print("cod do recurso desejado: ");
-		String cod_recurso = input.next();
-
-		System.out.println("Verificando disponibilidade...");
+		String cod_recurso = input.next().toUpperCase();
+		
 		boolean permissao = Processos.vericacaoDeDisponibilidade(cod_recurso, l_recursos);
 
 		if (permissao) {
 			System.out.println("Recurso disponivel");
 			System.out.print("id do usuario alocador: ");
-			int id_user = input.nextInt();
+			
+			int id_user = 0;
+			try { 
+				id_user  = input.nextInt();
+			} catch (Exception e){
+				System.out.println();
+				System.out.println("O id eh um numero inteiro.. voltando ao menu");
+				input.nextLine();
+				return;
+			}
+
 			int atividade = 0;
 			boolean perm = false;
 			if (Usuario.verificacaoDeUsuarioValido(id_user, users)) {
+				
 				System.out.print(
 						"\n1 - Aula tradicional\n2 - Apresentacoes\n3 - laboratorios\n0 - sair\nAtividade a realizar: ");
 				atividade = input.nextInt();
 
-				while (atividade < 1 || atividade > 4) {
+				while (atividade < 1 || atividade > 3) {
 					System.out.print(
 							"\n1 - Aula tradicional\n2 - Apresentacoes\n3 - laboratorios\n0 - sair\nAtividade a realizar: ");
 					atividade = input.nextInt();
-					if (atividade == 0)
-						break;
+					
+					if (atividade == 0) {
+						System.out.println("Voltando ao menu principal..");
+						return;
+					}
+						
 				}
+				
 				perm = false;
 				if (atividade == 2) {
 					perm = true;

@@ -169,13 +169,38 @@ public class Usuario {
 
 	public static List<Usuario> adicionar(List<Usuario> users, CodigoAutomatico cod) {
 
+		int tipo = 0;
 		System.out.println("TIPOS:\n*      1 - Adm\n*      2 - Pesquisador\n*     "
 				+ " 3 - Professor\n*      4 - Aluno Doutorado\n*      "
 				+ "5 - Aluno Mestrado\n*      6 - Aluno Graduacao \n********* Digite 7 para voltar");
 		input = new Scanner(System.in);
 
 		System.out.print("tipo: ");
-		int tipo = input.nextInt();
+
+		try {
+
+			tipo = input.nextInt();
+
+		} catch (Exception e) {
+			System.out.println("Digite um numero inteiro..");
+			input.nextLine();
+			
+		}
+			while(tipo < 1 || tipo > 7){
+				System.out.println("Digite um numero entre 1 e 7...\n-->");
+				try {
+
+					tipo = input.nextInt();
+
+				} catch (Exception e) {
+					System.out.println("Digite um numero inteiro..");
+					input.nextLine();
+					
+				}
+			}
+		
+		
+
 		if (tipo == 7) {
 			System.out.println("Voltando ao menu, cadastro cancelado..");
 			return users;
@@ -217,8 +242,9 @@ public class Usuario {
 			return "Alun Mest";
 		case 6:
 			return "Alun Grad";
+		default:
+			return "";
 		}
-		return "";
 	}
 
 	public static void menu() {
@@ -230,7 +256,8 @@ public class Usuario {
 		System.out.println("5 - Listar recursos");
 		System.out.println("6 - Autorizacao do responsavel pelo recurso");
 		System.out.println("7 - Confirmar conclusao do uso do recurso");
-		System.out.println("8 - disponibilizar recursos para alocacao (\"concluido\" para \"Em processo de alocacao\")");
+		System.out
+				.println("8 - disponibilizar recursos para alocacao (\"concluido\" para \"Em processo de alocacao\")");
 		System.out.println("9 - Consulta por recurso");
 		System.out.println("10 - Relatorio de atividades na unidade");
 		System.out.println("0 - Sair");
@@ -243,20 +270,18 @@ public class Usuario {
 			List<HistRecursos> historicoRecurso, CodigoAutomatico cod) {
 		input = new Scanner(System.in);
 		int esc = -1;
-		
+
 		try {
 			esc = input.nextInt();
 		} catch (Exception e) {
 			System.out.println("Voce deve digitar um inteiro..");
 			input.nextLine();
 		}
-		
-		
 
 		while (esc < 0 || esc > 10) {
-			
+
 			System.out.print("Digite um numero entre 0 e 10\n-->");
-			
+
 			try {
 				esc = input.nextInt();
 			} catch (Exception e) {
@@ -295,7 +320,7 @@ public class Usuario {
 			case 5:
 				System.out.println("\n** Recursos **\n");
 				Recursos.listarRecursos(l_recursos, users);
-				
+
 			case 6:
 				System.out.println("** Autorizacao do responsal pelo recurso **");
 
@@ -319,16 +344,30 @@ public class Usuario {
 				System.out.println("** Relatorio de atividades na unidade **\n");
 				Processos.relatorioDeAtividades(users, l_recursos, l_atividades, cod);
 				break;
-				
+
 			case 0:
 				System.out.println("\nSaindo...\n");
 				System.exit(0);
 			}
-			
+
 			menu();
-			esc = input.nextInt();
-			while (esc < 0 || esc > 10) {
+			try {
 				esc = input.nextInt();
+			} catch (Exception e) {
+				System.out.println("Voce deve digitar um inteiro..");
+				input.nextLine();
+			}
+
+			while (esc < 0 || esc > 10) {
+
+				System.out.print("Digite um numero entre 0 e 10\n-->");
+
+				try {
+					esc = input.nextInt();
+				} catch (Exception e) {
+					System.out.println("Voce deve digitar um inteiro..");
+					input.nextLine();
+				}
 			}
 		} // end switch
 	}
@@ -378,6 +417,7 @@ public class Usuario {
 				bool = true;
 			}
 		}
+		if(!bool)System.out.println("id invalido..");
 		return bool;
 	}
 

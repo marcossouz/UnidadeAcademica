@@ -100,8 +100,4 @@ public class Atividade {
 		return recurso;
 	}
 
-	public void setRecurso(String recurso) {
-		this.recurso = recurso;
-	}
-
 }
