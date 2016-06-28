@@ -1,3 +1,6 @@
+/*
+ * @author Marcos Souza
+ */
 package UA;
 
 public class CodigoAutomatico {

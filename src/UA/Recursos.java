@@ -1,3 +1,6 @@
+/*
+ * @author Marcos Souza
+ */
 package UA;
 
 import java.util.List;
