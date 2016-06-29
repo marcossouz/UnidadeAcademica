@@ -6,6 +6,10 @@ package UA;
 import java.util.List;
 
 public class Recursos {
+	public void setUsuario_alocador(int usuario_alocador) {
+		this.usuario_alocador = usuario_alocador;
+	}
+
 	private String id;
 	private String nome_recurso;
 	private int status;
@@ -27,16 +31,8 @@ public class Recursos {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getNome_recurso() {
 		return nome_recurso;
-	}
-
-	public void setNome_recurso(String nome_recurso) {
-		this.nome_recurso = nome_recurso;
 	}
 
 	public int getStatus() {
@@ -51,24 +47,12 @@ public class Recursos {
 		return usuario_alocador;
 	}
 
-	public void setUsuario_alocador(int usuario_alocador) {
-		this.usuario_alocador = usuario_alocador;
-	}
-
 	public int getResponsavel() {
 		return responsavel;
 	}
 
-	public void setResponsavel(int responsavel) {
-		this.responsavel = responsavel;
-	}
-
 	public String getAtividade_realizada() {
 		return atividade_realizada;
-	}
-
-	public void setAtividade_realizada(String atividade_realizada) {
-		this.atividade_realizada = atividade_realizada;
 	}
 
 	public static void listarRecursos(List<Recursos> l_recursos, List<Usuario> users) {

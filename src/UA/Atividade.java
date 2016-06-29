@@ -27,64 +27,32 @@ public class Atividade {
 		return user;
 	}
 
-	public void setUser(int user) {
-		this.user = user;
-	}
-
 	public int getTipo() {
 		return tipo;
-	}
-
-	public void setTipo(int tipo) {
-		this.tipo = tipo;
 	}
 
 	public String getTitulo() {
 		return titulo;
 	}
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-
 	public String getDescricao() {
 		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 
 	public String getParticipantes() {
 		return participantes;
 	}
 
-	public void setParticipantes(String participantes) {
-		this.participantes = participantes;
-	}
-
 	public String getMaterialApoio() {
 		return materialApoio;
-	}
-
-	public void setMaterialApoio(String materialApoio) {
-		this.materialApoio = materialApoio;
 	}
 
 	public String getDataHoraInicio() {
 		return dataHoraInicio;
 	}
 
-	public void setDataHoraInicio(String dataHoraInicio) {
-		this.dataHoraInicio = dataHoraInicio;
-	}
-
 	public String getDataHoraFim() {
 		return dataHoraFim;
-	}
-
-	public void setDataHoraFim(String dataHoraFim) {
-		this.dataHoraFim = dataHoraFim;
 	}
 
 	public static String nomeAtividade(int atividade) {
@@ -101,6 +69,12 @@ public class Atividade {
 
 	public String getRecurso() {
 		return recurso;
+	}
+
+	public static void escolhaTipo() {
+		System.out.println("TIPOS:\n*      1 - Adm\n*      2 - Pesquisador\n*     "
+				+ " 3 - Professor\n*      4 - Aluno Doutorado\n*      "
+				+ "5 - Aluno Mestrado\n*      6 - Aluno Graduacao \n********* Digite 7 para voltar");
 	}
 
 }

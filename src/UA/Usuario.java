@@ -31,56 +31,28 @@ public class Usuario {
 		return tipo;
 	}
 
-	public void setTipo(int tipo) {
-		this.tipo = tipo;
-	}
-
 	public int getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getNome() {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	public String getSobrenome() {
 		return sobrenome;
-	}
-
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
 	}
 
 	public String getLogin() {
 		return login;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
 	public String getSenha() {
 		return senha;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
 	public String getEmail() {
 		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public static boolean autenticar(List<Usuario> users) {
@@ -111,61 +83,28 @@ public class Usuario {
 		List<Usuario> users = new ArrayList<Usuario>();
 
 		// adm
-		Usuario adm = new Usuario(1, cod.codAuto(), "Administrador", "", "admin", "admin", "adm@ua.com");
-		users.add(adm);
-
-		Usuario marcos = new Usuario(1, cod.codAuto(), "Marcos", "Souza", "marcos", "admin", "ms@ua.com");
-		users.add(marcos);
-
-		Usuario elizania = new Usuario(1, cod.codAuto(), "Elizania", "Goncalves", "elizania", "admin", "eg@ua.com");
-		users.add(elizania);
-
-		Usuario moreira = new Usuario(1, cod.codAuto(), "Moreira", "Lima", "moreira", "admin", "ml@ua.com");
-		users.add(moreira);
-
-		Usuario esequiel = new Usuario(1, cod.codAuto(), "Esequiel", "Fernandes", "esequiel", "admin", "ef@ua.com");
-		users.add(esequiel);
-
-		Usuario joyce = new Usuario(1, cod.codAuto(), "Joyce", "Karine", "joyce", "admin", "jk@ua.com");
-		users.add(joyce);
+		users.add(new Usuario(1, cod.codAuto(), "Administrador", "", "admin", "admin", "adm@ua.com"));
+		users.add(new Usuario(1, cod.codAuto(), "Marcos", "Souza", "marcos", "admin", "ms@ua.com"));
+		users.add(new Usuario(1, cod.codAuto(), "Elizania", "Goncalves", "elizania", "admin", "eg@ua.com"));
+		users.add(new Usuario(1, cod.codAuto(), "Moreira", "Lima", "moreira", "admin", "ml@ua.com"));
+		users.add(new Usuario(1, cod.codAuto(), "Esequiel", "Fernandes", "esequiel", "admin", "ef@ua.com"));
+		users.add(new Usuario(1, cod.codAuto(), "Joyce", "Karine", "joyce", "admin", "jk@ua.com"));
 
 		// Pesquisadores
-		Usuario ronaldo = new Usuario(2, cod.codAuto(), "Ronaldo", "Santos", "ronaldo", "pesq", "rs@ua.com");
-		users.add(ronaldo);
-
-		Usuario josue = new Usuario(2, cod.codAuto(), "Josue", "Mendonca", "josue", "pesq", "jm@ua.com");
-		users.add(josue);
-
-		Usuario jessica = new Usuario(2, cod.codAuto(), "Jessica", "Keislane", "jessica", "pesq", "jkes@ua.com");
-		users.add(jessica);
-
-		Usuario gustavo = new Usuario(2, cod.codAuto(), "Gustavo", "Lourenco", "gustavo", "pesq", "lg@ua.com");
-		users.add(gustavo);
+		users.add(new Usuario(2, cod.codAuto(), "Ronaldo", "Santos", "ronaldo", "pesq", "rs@ua.com"));
+		users.add(new Usuario(2, cod.codAuto(), "Josue", "Mendonca", "josue", "pesq", "jm@ua.com"));
+		users.add(new Usuario(2, cod.codAuto(), "Jessica", "Keislane", "jessica", "pesq", "jkes@ua.com"));
+		users.add(new Usuario(2, cod.codAuto(), "Gustavo", "Lourenco", "gustavo", "pesq", "lg@ua.com"));
 
 		// professores
-		Usuario flavio = new Usuario(3, cod.codAuto(), "Flavio", "Oliveira", "flavio", "prof", "fo@ua.com");
-		users.add(flavio);
-
-		Usuario mateus = new Usuario(3, cod.codAuto(), "Mateus", "Lima", "mateus", "prof", "ml@ua.com");
-		users.add(mateus);
-
-		Usuario cicero = new Usuario(3, cod.codAuto(), "Cicero", "Jose", "cicero", "prof", "cj@ua.com");
-		users.add(cicero);
-
-		Usuario maria = new Usuario(3, cod.codAuto(), "Maria", "Moreira", "maria", "prof", "mm@ua.com");
-		users.add(maria);
-
-		Usuario raquel = new Usuario(3, cod.codAuto(), "Raquel", "Lima", "raquel", "prof", "rli@ua.com");
-		users.add(raquel);
-
-		Usuario josefa = new Usuario(3, cod.codAuto(), "Josefa", "Lima", "josefa", "prof", "jl@ua.com");
-		users.add(josefa);
-
-		Usuario eliude = new Usuario(3, cod.codAuto(), "Eliude", "Goncalves", "eliude", "prof", "ego@ua.com");
-		users.add(eliude);
-
-		Usuario rafael = new Usuario(3, cod.codAuto(), "Rafael", "Rocha", "rafael", "prof", "rr@ua.com");
-		users.add(rafael);
+		users.add(new Usuario(3, cod.codAuto(), "Flavio", "Oliveira", "flavio", "prof", "fo@ua.com"));
+		users.add(new Usuario(3, cod.codAuto(), "Mateus", "Lima", "mateus", "prof", "ml@ua.com"));
+		users.add(new Usuario(3, cod.codAuto(), "Cicero", "Jose", "cicero", "prof", "cj@ua.com"));
+		users.add(new Usuario(3, cod.codAuto(), "Maria", "Moreira", "maria", "prof", "mm@ua.com"));
+		users.add(new Usuario(3, cod.codAuto(), "Raquel", "Lima", "raquel", "prof", "rli@ua.com"));
+		users.add(new Usuario(3, cod.codAuto(), "Josefa", "Lima", "josefa", "prof", "jl@ua.com"));
+		users.add(new Usuario(3, cod.codAuto(), "Eliude", "Goncalves", "eliude", "prof", "ego@ua.com"));
+		users.add(new Usuario(3, cod.codAuto(), "Rafael", "Rocha", "rafael", "prof", "rr@ua.com"));
 
 		return users;
 	}
@@ -173,9 +112,7 @@ public class Usuario {
 	public static List<Usuario> adicionar(List<Usuario> users, CodigoAutomatico cod) {
 
 		int tipo = 0;
-		System.out.println("TIPOS:\n*      1 - Adm\n*      2 - Pesquisador\n*     "
-				+ " 3 - Professor\n*      4 - Aluno Doutorado\n*      "
-				+ "5 - Aluno Mestrado\n*      6 - Aluno Graduacao \n********* Digite 7 para voltar");
+		Atividade.escolhaTipo();
 		input = new Scanner(System.in);
 
 		System.out.print("tipo: ");
@@ -323,7 +260,8 @@ public class Usuario {
 			case 5:
 				System.out.println("\n** Recursos **\n");
 				Recursos.listarRecursos(l_recursos, users);
-
+				break;
+				
 			case 6:
 				System.out.println("** Autorizacao do responsal pelo recurso **");
 
